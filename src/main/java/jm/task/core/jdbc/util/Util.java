@@ -22,12 +22,12 @@ public class Util {
     private Util() {
     }
 
-    public static Util getInstance() {
-        if (instance == null) {
-            instance = new Util();
-        }
-        return instance;
-    }
+    // public static Util getInstance() {
+     //   if (instance == null) {
+     //       instance = new Util();
+     //   }
+      //  return instance;
+   // }
 
     private static SessionFactory sessionFactory;
     private static final Environment environment = null;

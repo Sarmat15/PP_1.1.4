@@ -14,7 +14,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     }
 
-    public void createUsersTable() {
+    public void createUsersTable() throws SQLException {
         try {
 
             // команда создания таблицы
@@ -31,10 +31,13 @@ public class UserDaoJDBCImpl implements UserDao {
 
             System.out.println(ex);
         }
+        finally {
+            connection.close();
+        }
 
     }
 
-    public void dropUsersTable() {
+    public void dropUsersTable() throws SQLException {
 
         Statement statement = null;
         try {
@@ -46,11 +49,14 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("Database  not found...");
             System.out.println(e);
         }
+        finally {
+            connection.close();
+        }
 
 
     }
 
-    public void saveUser(String name, String lastName, byte age) {
+    public void saveUser(String name, String lastName, byte age) throws SQLException {
         User user = new User(name, lastName, age);
         String sql = "INSERT INTO Person (name, lastname, age) VALUES (?, ?, ? )";
         try {
@@ -66,10 +72,13 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch ( SQLException throwables) {
             throwables.printStackTrace();
         }
+        finally {
+            connection.close();
+        }
 
     }
 
-    public void removeUserById(long id) {
+    public void removeUserById(long id) throws SQLException {
         PreparedStatement preparedStatement =
                 null;
         try {
@@ -81,15 +90,18 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        finally {
+            connection.close();
+        }
 
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws SQLException {
 
         List<User> people = new ArrayList<>();
 
-        try {
-            Statement statement = connection.createStatement();
+        try(Statement statement = connection.createStatement();) {
+
             String SQL = "SELECT * FROM Person";
             ResultSet resultSet = statement.executeQuery(SQL);
 
@@ -108,17 +120,20 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException | NullPointerException throwables) {
             throwables.printStackTrace();
         }
+        finally {
+            connection.close();
+        }
 
         return people;
     }
 
-    public void cleanUsersTable() {
+    public void cleanUsersTable() throws SQLException {
         int i = 0;
         PreparedStatement preparedStatement =
                 null;
         String QUERY = "SELECT id, name, lastname, age FROM Person";
-        try {
-            Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement();) {
+
 
             ResultSet rs = statement.executeQuery(QUERY);
             while (rs.next()) {
@@ -130,8 +145,11 @@ public class UserDaoJDBCImpl implements UserDao {
             }
             rs.close();
         } catch (SQLException e) {
-            System.out.println("Table ii empty");
+            System.out.println("Table is empty");
             ;
+        }
+        finally {
+            connection.close();
         }
 
     }
