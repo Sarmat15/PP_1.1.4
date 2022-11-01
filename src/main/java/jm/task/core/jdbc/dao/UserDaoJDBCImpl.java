@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private static Connection connection = Util.getConnection();
+    //private static Connection connection = Util.getConnection();
+    Connection connection = null;
 
     public UserDaoJDBCImpl() {
 
@@ -16,7 +17,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() throws SQLException {
         try {
-
+            Connection connection = Util.getConnection();
             // команда создания таблицы
             String sqlCommand = "CREATE TABLE person (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(20), lastName VARCHAR(20), age INT)";
 
@@ -41,6 +42,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
         Statement statement = null;
         try {
+            Connection connection = Util.getConnection();
             statement = connection.createStatement();
             String sql = "DROP TABLE person";
             statement.executeUpdate(sql);
@@ -60,6 +62,7 @@ public class UserDaoJDBCImpl implements UserDao {
         User user = new User(name, lastName, age);
         String sql = "INSERT INTO Person (name, lastname, age) VALUES (?, ?, ? )";
         try {
+            Connection connection = Util.getConnection();
             PreparedStatement preparedStatement =
                     connection.prepareStatement(sql);
 
@@ -82,6 +85,7 @@ public class UserDaoJDBCImpl implements UserDao {
         PreparedStatement preparedStatement =
                 null;
         try {
+            Connection connection = Util.getConnection();
             preparedStatement = connection.prepareStatement("DELETE FROM Person WHERE id=?");
 
             preparedStatement.setLong(1, id);
@@ -101,6 +105,7 @@ public class UserDaoJDBCImpl implements UserDao {
         List<User> people = new ArrayList<>();
 
         try(Statement statement = connection.createStatement();) {
+            Connection connection = Util.getConnection();
 
             String SQL = "SELECT * FROM Person";
             ResultSet resultSet = statement.executeQuery(SQL);
@@ -133,6 +138,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 null;
         String QUERY = "SELECT id, name, lastname, age FROM Person";
         try (Statement statement = connection.createStatement();) {
+            Connection connection = Util.getConnection();
 
 
             ResultSet rs = statement.executeQuery(QUERY);
